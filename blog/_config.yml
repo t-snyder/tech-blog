@@ -1,0 +1,129 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+#
+# If you need help with YAML syntax, here are some quick references for you:
+# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
+# https://learnxinyminutes.com/docs/yaml/
+#
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+
+title: "Learning Prototypes - Deployable to Minikube"
+email: tsnyder@contactoffice.com
+name: "Tim Snyder"
+url: "https://t-snyder.github.io/tech-blog/"
+#doc_name: "Steps for Deploying the Prototype" 
+description: >- # this means to ignore newlines until "baseurl:"
+  The purpose of the prototype project is to demonstrate the configuration and use of 
+  ingress-nginx, and then increasing complexity with Cert-Manager and Pekko-Http within 
+  the minikube environment. The tests include http and https terminated at the ingress 
+  controller. Cert-manager is used to manage self-signed certificates for the TLS.
+#doc_url: "/_pages/README.md"
+github_username:  t-snyder
+search: true
+
+#url: "" # the base hostname & protocol for your site, e.g. http://example.com
+#twitter_username: jekyllrb
+github_username:  t_snyder
+
+# Build settings
+markdown: kramdown
+remote_theme: "t-snyder/minimal-mistakes"
+minimal_mistakes_skin: aqua
+
+pagination.enabled: true
+paginate: 5 # number of posts to show per page
+paginate_path: /page:num/
+
+include:
+  - _pages
+  - _posts
+
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jemoji
+  - jekyll-include-cache
+  - jekyll-seo-tag
+
+# mimic GitHub Pages with --safe
+whitelist:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-include-cache
+  - jekyll-archives
+  - jekyll-seo-tag
+ 
+author:
+  name   : "Tim Snyder"
+  avatar : "/assets/images/bio-photo.jpg"
+  bio    : "My bio is here."
+  location : "Malindi, Kenya"
+  links:
+    - label: "LinkedIn Profile"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://linkedin.com/in/tim-snyder-a3756/"
+    - label: "GitHub Repo"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/t-snyder/"
+ 
+footer:
+  links:
+    - label: "LinkedIn"
+      icon: "/assets/icons/linked.png"
+      url: "https://linkedin.com/in/tim-snyder-a3756"
+    - label: "GitHub"
+      icon: "/assets/icons/github.png"
+      url: "https://github.com/t-snyder"
+
+defaults:
+  # _posts
+  - scope:
+      path: "_posts"
+      type: posts
+    values:
+      layout: readme
+      author_profile: true
+      read_time: true
+      comments: true
+      share: true
+      related: true
+  # _pages
+  - scope:
+      path: "_pages"
+      type: pages
+    values:
+      layout: readme
+      author_profile: true
+
+# Exclude from processing.
+# The following items will not be processed, by default.
+# Any item listed under the `exclude:` key here will be automatically added to
+# the internal "default list".
+#
+# Excluded items can be processed by explicitly listing the directories or
+# their entries' file path in the `include:` list.
+#
+# exclude:
+#   - .sass-cache/
+#   - .jekyll-cache/
+#   - gemfiles/
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules/
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/
