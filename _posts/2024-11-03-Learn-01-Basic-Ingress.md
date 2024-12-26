@@ -1,9 +1,9 @@
 ---
 layout: readme
-title: 01 - Basic ingress-nginx http and https-with termination prototype.
-permalink: /proto-001/
+title: 01 - Learn-01-Basic-Ingress.
+permalink: /learn-01/
 pinned: false
-excerpt: Shell instructions for deploying basic ingress-ngingx ingress with both http and https termination. Uses ingress-nginx, cert-manager, peeko-http
+excerpt: Prototype deploying basic ingress-ngingx ingress with both http and https termination. Uses ingress-nginx, cert-manager, peeko-http
 ---
 Github Project: [https://github.com/t-snyder/learn-01-basic-ingress](https://github.com/t-snyder/learn-01-basic-ingress)
 

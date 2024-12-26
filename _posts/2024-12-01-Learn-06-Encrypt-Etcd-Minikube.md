@@ -1,3 +1,13 @@
+---
+layout: readme
+title: 06 - Learn-06-Advanced-Gateway-API
+permalink: /learn-06/
+pinned: false
+excerpt: The purpose of the prototype is to provide a deployment of the Kubernetes Apiserver where the etcd store is
+encrypted.
+---
+Github Project: [https://github.com/t-snyder/learn-06-encrypt-etcd-minikube](https://github.com/t-snyder/learn-06-encrypt-etcd-minikube)
+
 # Learn-06-Encrypt-ETCD-minikube
 
 ## Prototype Purpose

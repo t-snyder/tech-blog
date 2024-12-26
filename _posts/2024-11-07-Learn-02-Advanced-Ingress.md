@@ -1,7 +1,7 @@
 ---
 layout: readme
 title: 02 - Learn-02-Advanced-Ingress
-permalink: /proto-002/
+permalink: /learn-02/
 pinned: false
 excerpt: Project deploying ingress-ngingx ingress with both http and https-passthru only; Cert-Manager and Hashicorp Vault CA.
 ---
