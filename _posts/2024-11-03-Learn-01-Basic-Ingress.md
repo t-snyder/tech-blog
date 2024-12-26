@@ -1,7 +1,6 @@
 ---
 layout: readme
 title: 01 - Learn-01-Basic-Ingress.
-permalink: /learn-01/
 pinned: false
 excerpt: Prototype deploying basic ingress-ngingx ingress with both http and https termination. Uses ingress-nginx, cert-manager, peeko-http
 ---

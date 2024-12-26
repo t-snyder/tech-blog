@@ -41,9 +41,10 @@ markdown: kramdown
 remote_theme: "t-snyder/minimal-mistakes"
 minimal_mistakes_skin: aqua
 
-pagination.enabled: true
-paginate: 5 # number of posts to show per page
-paginate_path: /page:num/
+# Pagination Settings
+#pagination.enabled: true
+#paginate: 
+#paginate_path: /page:num
 
 include:
   - _pages
