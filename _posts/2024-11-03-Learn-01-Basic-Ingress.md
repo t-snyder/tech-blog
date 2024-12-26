@@ -1,16 +1,15 @@
 ---
 layout: readme
 title: 01 - Basic ingress-nginx http and https-with termination prototype.
-permalink: /readme/
+permalink: /proto-001/
 pinned: false
-excerpt: Shell instrutctions for deploying basic ingress-ngingx ingress with both http and https. Https passthru is not supported.
-last_modified_at: 2024-12-01
+excerpt: Shell instructions for deploying basic ingress-ngingx ingress with both http and https termination. Uses ingress-nginx, cert-manager, peeko-http
 ---
-Github Project: [https://github.com/t-snyder/ingress-nginx-test](https://github.com/t-snyder/ingress-nginx-test)
+Github Project: [https://github.com/t-snyder/learn-01-basic-ingress](https://github.com/t-snyder/learn-01-basic-ingress)
 
 ## Purpose
 The purpose of the prototype project is to demonstrate the configuration and use of ingress-nginx, and then increasing 
-complexity with Cert-Manager and Pekko-Http  within the minikube environment. The tests include http and https terminated at the ingress controller. Cert-manager is
+complexity with Cert-Manager and Pekko-Http within the minikube environment. The tests include http and https terminated at the ingress controller. Cert-manager is
 used to manage self-signed certificates for the TLS.
 
 ## Projects Included
@@ -37,10 +36,12 @@ The project deployment presumes the following:
    3. Linux machine. I use Ubuntu 20.04 There are several utility commands within deployKube.sh which are linux specific. These can easily be modified or removed for your operating system environment.
 
 ## Runtime Instructions:
-  - Open the fruit-deploy/scripts/deployKube.sh file within a text editor. 
-  - Open a terminal to process the commands. 
-  - Modify the $PROTODIR env variable in the terminal to point to your source directory.
-  - Run the commands within the fruit-deploy/scripts/deployKube.sh separately.
+  1. Open the fruit-deploy/scripts/deployKube.sh file within a text editor. 
+  2. Open a terminal to process the commands. 
+  3. Modify the $PROTODIR env variable in the terminal to point to your source directory.
+  4. Run the commands within the fruit-deploy/scripts/deployKube.sh separately.
+     **Note -**<br> 
+      *The commands within the deployKube.sh are meant to be copy pasted into a terminal and not run as a bash script.*
 
 ## Testing
 At the end of the deployKube.sh file there is a section for curl commands to invoke various deployed capabilities. A brief summary of the capabilites are:

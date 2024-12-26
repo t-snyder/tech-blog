@@ -1,12 +1,14 @@
 ---
 layout: readme
-excerpt: Learning tutorials with working minikube deployment scripts. An introduction to the projects provided.
+excerpt: Introduction for Minikube based Ingress and Kubernetes Gateway API prototypes using Istio, Vault, and Cert-Manager
+seo_title: Introduction for Minikube based Ingress and Kubernetes Gateway API prototypes using Istio, Vault, and Cert-Manager 
+seo_description: An introduction explaining the implementation of prototypes built upon minikube kubernetes using ingress-nginx, istio in ambient mode, kubernetes gateway API, hashicorp vault, cert-manager and metallb.
 pinned: true
 ---
 
 # Various Prototypes exploring Kubernetes Ingress and Kubernetes Gateway API With Istio Ambient Mode, Cert-Manager and Hashicorp Vault
 
-<h2>Learning Prototypes Overview</h2>
+## Learning Prototypes Overview
 Kubernetes, abbreviated as K8s, is a powerful open-source platform designed to
 automate the deployment, scaling, and management of containerized applications. 
 Originally designed and developed by Google, it was open sourced to the Linux 
@@ -39,6 +41,23 @@ Istio Ambient mode). The deployments are not production ready but
 provide a basis for understanding how to use and deploy the
 functionality.
 
+The first step in this process is to understand the prior capabilities for Ingress
+provided within the Kubernetes environment. These mainly rely on Ingress resources.
+The first two Learning prototypes provide a foundation for understanding ingress
+deployments using as a foundation ingress-nginx within minikube. These prototypes are:
+  1. Learn-01-Basic-Ingress
+  2. Learn-02-Advanced-Ingress
+
+The next set of Prototypes switch to using Kubernetes Gateway API for cluster access.
+These prototypes are:
+  1. Learn-03-basic-gateway-api     (uses Istio Gateway)
+  2. Learn-04-nginx-gateway-fabric  (uses Nginx Gateway Fabric)
+  3. Learn-05-advanced-gateway-api  (uses Istio Gateway)
+
+The 6th Prototype is on a separate technology track. It details how to encrypt etcd 
+within the minikube environment.
+  1. Learn-06-encrypt-etcd-minikube
+    
 ## Evolution from Ingress to Kubernetes Gateway API
 Per the Kubernetes Gateway API documentation - Gateway API is an
 official Kubernetes project focused on L4 and L7 routing in Kubernetes.

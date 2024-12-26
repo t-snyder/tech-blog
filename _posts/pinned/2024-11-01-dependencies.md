@@ -1,11 +1,9 @@
 ---
 layout: readme
 excerpt: Please read. Environment used for developing and testing ingress and kubernetes gateway api prototypes
+seo_title: Dependencies for Minikube based Ingress and Kubernetes Gateway API prototype series, including Istio, Vault, and Cert-Manager 
+seo_description: A post listing the dependencies for a series of posts explaining the implementation of prototypes built upon minikube kubernetes using ingress-nginx, istio in ambient mode, kubernetes gateway API, hashicorp vault, and metallb.
 pinned: true
-seo_title: Dependencies for Minikube based Ingress and Kubernetes Gateway API prototype series. Istio, Vault, Cert-Manager, 
-seo_description: A post listing the dependencies for a series of posts explaining the implementation of prototypes
-built upon minikube kubernetes using ingress-nginx, istio in ambient mode, kubernetes gateway API, hashicorp vault, and metallb.
-
 ---
 
 This series of kubernetes Ingress and Gateway API learning prototypes were developed and tested 
@@ -46,8 +44,8 @@ particular OS.
 
 
 ## Deploying Prototypes
-The various scripts provided for deploying each of the prototypes are NOT automated
-scripts. The bash or sh script portions are designed to be copy/pasted ( generally on a per line/cmd basis )
+The various scripts provided for deploying each of the prototypes **are NOT automated
+scripts**. The bash or sh script portions are designed to be copy/pasted ( generally on a per line/cmd basis )
 into a linux terminal. There are several reasons for this:
   1. The purpose is learning. Explicitly following each step enhances the learning.
   2. In different places the scripts log into a running pod in order to perform certain activities.
