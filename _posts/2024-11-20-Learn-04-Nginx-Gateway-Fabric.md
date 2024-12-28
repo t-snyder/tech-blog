@@ -1,6 +1,6 @@
 ---
 layout: readme
-title: 04 - Learn-04-Nginx-Gateway-Fabric
+title: Learning - Nginx Gateway Fabric
 pinned: false
 excerpt: Project deploying Nginx Gateway Fabric as the Kubernetes Gateway API controller. Project purpose is to learn about the implementation functionality.
 ---

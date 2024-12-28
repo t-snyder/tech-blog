@@ -1,6 +1,6 @@
 ---
 layout: readme
-title: 02 - Learn-02-Advanced-Ingress
+title: Learning - Advanced Ingress (Cert-Manager, Vault)
 pinned: false
 excerpt: Project deploying ingress-ngingx ingress with both http and https-passthru only; Cert-Manager and Hashicorp Vault CA.
 ---

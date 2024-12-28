@@ -1,9 +1,10 @@
 ---
-layout: readme
+layout: archive
+title: Dependencies
+permalink: /dependencies/
 excerpt: Please read. Environment used for developing and testing ingress and kubernetes gateway api prototypes
 seo_title: Dependencies for Minikube based Ingress and Kubernetes Gateway API prototype series, including Istio, Vault, and Cert-Manager 
 seo_description: A post listing the dependencies for a series of posts explaining the implementation of prototypes built upon minikube kubernetes using ingress-nginx, istio in ambient mode, kubernetes gateway API, hashicorp vault, and metallb.
-pinned: true
 ---
 
 This series of kubernetes Ingress and Gateway API learning prototypes were developed and tested 

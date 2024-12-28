@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: "Learning Prototypes - Deployable to Minikube"
+title: "At the Beach - Minikube Security Prototypes"
 email: tsnyder@contactoffice.com
 name: "Tim Snyder"
 url: "https://t-snyder.github.io/tech-blog/"
@@ -42,8 +42,8 @@ remote_theme: "t-snyder/minimal-mistakes"
 minimal_mistakes_skin: aqua
 
 # Pagination Settings
-#pagination.enabled: true
-#paginate: 
+pagination.enabled: true
+paginate: 5
 #paginate_path: /page:num
 
 include:
@@ -70,7 +70,7 @@ whitelist:
 author:
   name   : "Tim Snyder"
   avatar : "/assets/images/bio-photo.jpg"
-  bio    : "Semi-retired Solution Architect who has been blessed by the projects I have been able to contribute over my career."
+  bio    : "Semi-retired Solution Architect who has been blessed by the projects I have been able to contribute to over my career."
   location : "Malindi, Kenya"
   links:
     - label: "LinkedIn Profile"

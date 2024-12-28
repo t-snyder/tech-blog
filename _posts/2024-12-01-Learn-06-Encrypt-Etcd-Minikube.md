@@ -1,6 +1,6 @@
 ---
 layout: readme
-title: 06 - Learn-06-Encrypt-Etcd-Minikube
+title: Learning - Encrypt Etcd Minikube
 pinned: false
 excerpt: The purpose of the prototype is to provide a deployment of the Kubernetes Apiserver where the etcd store is encrypted.
 ---
@@ -19,6 +19,7 @@ generated within minikube, these changes must be made after minikube has started
   1. https://techexpertise.medium.com/encrypting-the-secret-data-at-etcd-store-on-a-minikube-k8s-cluster-2338c68263a5
 
 ## Prototype Infrastructure Used
+
 | Core Infrastructure | Version         |
 | --------------- | --------------- |
 | Minikube        | 1.34.0          |
@@ -26,6 +27,7 @@ generated within minikube, these changes must be made after minikube has started
 | Docker          | 27.2.0          |
 
 ## Computer Configuration:
+
 | Name            | Description                             |
 | --------------- | --------------------------------------- |
 | Ubuntu          | 20.04.6 LTS                             |

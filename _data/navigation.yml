@@ -1,5 +1,7 @@
-#main:
-#  - title: "About me"
-#    url: /about/
-#  - title: "Deployment Instructions"
-#    url: /readme/
+main:
+  - title: "About"
+    url: /about/
+  - title: "Intro"
+    url: /intro/
+  - title: "Dependencies"
+    url: /dependencies/

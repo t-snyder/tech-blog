@@ -1,24 +1,20 @@
 ---
-layout: single
-#paginate: true
+layout: archive
 ---
 
-{% assign pinned_posts = site.posts | where: "pinned", true %}
-{% assign other_posts = site.posts | where: "pinned", false %}
+{{ content }}
 
-{% if pinned_posts.size > 0 %}
-  <h2 style="margin-top: .16em; margin-bottom: 0em">Pinned Posts</h2>
-  {% assign entries_layout = page.entries_layout | default: 'list' %}
-  <div class="entries-{{ entries_layout }}">
-    {% include documents-collection.html entries=pinned_posts type=entries_layout %}
-  </div>
+<h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
+
+{% if paginator %}
+  {% assign posts = paginator.posts %}
+{% else %}
+  {% assign posts = site.posts %}
 {% endif %}
 
-
-<h2>Latest Posts</h2>
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 <div class="entries-{{ entries_layout }}">
-  {% include documents-collection.html entries=other_posts type=entries_layout %}
+  {% include documents-collection.html entries=posts type=entries_layout %}
 </div>
 
 {% include paginator.html %}

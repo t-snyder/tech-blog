@@ -1,9 +1,10 @@
 ---
-layout: readme
+layout: archive
+title: Intro
+permalink: /intro/
 excerpt: Introduction for Minikube based Ingress and Kubernetes Gateway API prototypes using Istio, Vault, and Cert-Manager
 seo_title: Introduction for Minikube based Ingress and Kubernetes Gateway API prototypes using Istio, Vault, and Cert-Manager 
 seo_description: An introduction explaining the implementation of prototypes built upon minikube kubernetes using ingress-nginx, istio in ambient mode, kubernetes gateway API, hashicorp vault, cert-manager and metallb.
-pinned: true
 ---
 
 # Various Prototypes exploring Kubernetes Ingress and Kubernetes Gateway API With Istio Ambient Mode, Cert-Manager and Hashicorp Vault

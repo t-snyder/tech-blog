@@ -1,0 +1,24 @@
+---
+layout: single
+#paginate: true
+---
+
+{% assign pinned_posts = site.posts | where: "pinned", true %}
+{% assign other_posts = site.posts | where: "pinned", false %}
+
+{% if pinned_posts.size > 0 %}
+  <h2 style="margin-top: .16em; margin-bottom: 0em">Pinned Posts</h2>
+  {% assign entries_layout = page.entries_layout | default: 'list' %}
+  <div class="entries-{{ entries_layout }}">
+    {% include documents-collection.html entries=pinned_posts type=entries_layout %}
+  </div>
+{% endif %}
+
+
+<h2>Latest Posts</h2>
+{% assign entries_layout = page.entries_layout | default: 'list' %}
+<div class="entries-{{ entries_layout }}">
+  {% include documents-collection.html entries=other_posts type=entries_layout %}
+</div>
+
+{% include paginator.html %}
