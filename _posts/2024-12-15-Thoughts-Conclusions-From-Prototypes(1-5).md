@@ -2,6 +2,7 @@
 layout: readme
 title: Thoughts - Conclusions from Learning Prototypes 1-5
 excerpt: Conclusions reached from implementing Ingress and Gateway API prototypes with Cert-Manager, Vault and Istio (Ambient Mode)
+pinned: false
 ---
 
 ## Prototypes Explanation
@@ -19,7 +20,7 @@ me is the Kubernetes Gateway API using Istio Ambient Gateway Controller and asso
 The major reasons for this recommendation is:
   1. Istio Gateway provides the ability to configure multiple Gateway objects in differing namespaces which support differing types of Routes.
   2. Ingress-nginx in supporting TLS Passthru requires Passthru for all the cluster.
-  3. Nginx Gateway Fabric only allows a single Gateway ojbect per kubernetes cluster.
+  3. Nginx Gateway Fabric only allows a single Gateway object per kubernetes cluster. As such it is less interesting to me.
   4. Istio Gateway integrates well with Cert-Manager.
 
 
