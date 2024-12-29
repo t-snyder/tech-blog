@@ -41,6 +41,8 @@ markdown: kramdown
 remote_theme: "t-snyder/minimal-mistakes"
 minimal_mistakes_skin: aqua
 
+repository: # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
+
 # Pagination Settings
 pagination.enabled: true
 paginate: 5
@@ -72,6 +74,7 @@ author:
   avatar : "/assets/images/bio-photo.jpg"
   bio    : "Semi-retired Solution Architect who has been blessed by the projects I have been able to contribute to over my career."
   location : "Malindi, Kenya"
+  email: tsnyder@contactoffice.com
   links:
     - label: "LinkedIn Profile"
       icon: "fab fa-fw fa-linkedin"
@@ -88,6 +91,13 @@ footer:
     - label: "GitHub"
       icon: "/assets/icons/github.png"
       url: "https://github.com/t-snyder"
+
+comments:
+  provider: "utterances"
+  utterances:
+    theme: "github-light" # "github-dark"
+    issue_term: "pathname"
+    label: "comment" # Optional - must be existing label.
 
 defaults:
   # _posts
@@ -108,6 +118,7 @@ defaults:
     values:
       layout: readme
       author_profile: true
+      comments: true
 
 # Exclude from processing.
 # The following items will not be processed, by default.
