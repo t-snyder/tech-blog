@@ -1,6 +1,6 @@
 ---
 layout: readme
-title: Thoughts - Conclusions from Learning Prototypes 1-5
+title: Thoughts-01 Conclusions from Ingress/Gateway API Learning Prototypes 1-5
 excerpt: Conclusions reached from implementing Ingress and Gateway API prototypes with Cert-Manager, Vault and Istio (Ambient Mode)
 pinned: false
 ---
