@@ -298,8 +298,9 @@ From this output the kube deployment components were obtained. This script does 
 In order to run the Java pulsar-client application with tls you need to obtain and copy
 the pulsar CA public certificate to the project resources directory. The following commands
 do this.
-  1. CLIENT_PATH=$PROTODIR/../pulsar-client/src/main/resources
-  2. kubectl get secret pulsar-mini-ca-tls -n pulsar -o "jsonpath={.data['ca\.crt']}" | base64 -d > $CLIENT_PATH/tls.crt
+
+    CLIENT_PATH=$PROTODIR/../pulsar-client/src/main/resources
+    kubectl get secret pulsar-mini-ca-tls -n pulsar -o "jsonpath={.data['ca\.crt']}" | base64 -d > $CLIENT_PATH/tls.crt
 
 After doing these steps be sure to refresh the project. Also within the PulsarClientMain class ensure that the tls variable is set to true. You can now run a Java Application run configuration with the PulsarClientMain class as the Main class.
 
@@ -339,8 +340,9 @@ This script does a minimal installation of only the main required Pulsar compone
 In order to run the Java pulsar-client application with tls you need to obtain and copy
 the pulsar CA public certificate to the project resources directory. The following commands
 do this.
-  1. CLIENT_PATH=$PROTODIR/../pulsar-client/src/main/resources
-  2. kubectl get secret pulsar-mini-ca-tls -n pulsar -o "jsonpath={.data['ca\.crt']}" | base64 -d > $CLIENT_PATH/tls.crt
+
+    CLIENT_PATH=$PROTODIR/../pulsar-client/src/main/resources
+    kubectl get secret pulsar-mini-ca-tls -n pulsar -o "jsonpath={.data['ca\.crt']}" | base64 -d > $CLIENT_PATH/tls.crt
 
 After doing these steps be sure to refresh the project. Also within the PulsarClientMain class ensure that the tls variable is set to true. You can now run a Java Application run configuration with the PulsarClientMain class as the Main class.
 
