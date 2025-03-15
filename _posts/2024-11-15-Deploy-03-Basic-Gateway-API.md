@@ -1,11 +1,11 @@
 ---
 layout: readme
-title: Learning-03 Basic Gateway API (Istio - Ambient Mode, Cert-Manager)
+title: Deploy-03 Basic Gateway API (Istio - Ambient Mode, Cert-Manager)
 pinned: false
 excerpt: Shell instructions for deploying Kubernetes Gateway API, Istio Ambient Mode, and Cert-Manager using HTTPRoute for Http and Https-terminated, and TLSRoute for Passthru.
 last_modified_at: 2024-12-01
 ---
-Github Project: [https://github.com/t-snyder/learn03-basic-gateway-api](https://github.com/t-snyder/learn-03-basic-gateway-api)
+Github Project: [https://github.com/t-snyder/swploy-03-basic-gateway-api](https://github.com/t-snyder/deploy-03-basic-gateway-api)
 
 ## Purpose
 The purpose of these prototypes is to provide a working deployment and test environment for the new functionality (Kubernetes Gateway API

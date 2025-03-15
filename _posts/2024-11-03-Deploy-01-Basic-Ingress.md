@@ -1,9 +1,9 @@
 ---
 layout: readme
-title: Learning-01 Basic Ingress (Ingress-Nginx, Cert-Manager, Pekko-Http)
+title: Deploy-01 Basic Ingress (Ingress-Nginx, Cert-Manager, Pekko-Http)
 excerpt: Prototype deploying basic ingress-ngingx ingress with both http and https termination. Uses ingress-nginx, cert-manager, pekko-http
 ---
-Github Project: [https://github.com/t-snyder/learn-01-basic-ingress](https://github.com/t-snyder/learn-01-basic-ingress)
+Github Project: [https://github.com/t-snyder/deploy-01-basic-ingress](https://github.com/t-snyder/deploy-01-basic-ingress)
 
 ## Purpose
 The purpose of the prototype project is to demonstrate the configuration and use of ingress-nginx, and then increasing 

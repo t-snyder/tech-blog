@@ -1,10 +1,10 @@
 ---
 layout: readme
-title: Learning-06 Encrypt Etcd Minikube
+title: Deploy-06 Encrypt Etcd Minikube
 pinned: false
 excerpt: The purpose of the prototype is to provide a deployment of the Kubernetes Apiserver where the etcd store is encrypted.
 ---
-Github Project: [https://github.com/t-snyder/learn-06-encrypt-etcd-minikube](https://github.com/t-snyder/learn-06-encrypt-etcd-minikube)
+Github Project: [https://github.com/t-snyder/deploy-06-encrypt-etcd-minikube](https://github.com/t-snyder/deploy-06-encrypt-etcd-minikube)
 
 ## Prototype Purpose
 The purpose of the prototype is to provide a deployment of the Kubernetes Apiserver where the etcd store is

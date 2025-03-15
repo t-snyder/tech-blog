@@ -1,10 +1,10 @@
 ---
 layout: readme
-title: Learning-05 Advanced Gateway API (Istio Ambient Mode, Cert-Manager, Vault)
+title: Deploy-05 Advanced Gateway API (Istio Ambient Mode, Cert-Manager, Vault)
 pinned: false
 excerpt: A functional prototype using Kubernetes Gateway API supporting TLS Termination and Passthru. Built using Istio (Ambient Mode), Cert-Manager and Hashicorp Vault for certificate lifecycle management and signing TLS certificates within a Minikube environment.
 ---
-Github Project: [https://github.com/t-snyder/learn-05-advanced-gateway-api](https://github.com/t-snyder/learn-05-advanced-gateway-api)
+Github Project: [https://github.com/t-snyder/deploy-05-advanced-gateway-api](https://github.com/t-snyder/deploy-05-advanced-gateway-api)
 
 # Learn-05-Advanced-Gateway-API
 

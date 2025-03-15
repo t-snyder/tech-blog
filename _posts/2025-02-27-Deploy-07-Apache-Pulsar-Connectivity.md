@@ -1,10 +1,10 @@
 ---
 layout: readme
-title: Learning-07 Pulsar Minikube with External Connections (Pulsar, Cert-Manager, Istio Ambient Mode)
+title: Deploy-07 Pulsar Minikube with External Connections (Pulsar, Cert-Manager, Istio Ambient Mode)
 pinned: false
 excerpt: A set of deployable prototypes targeting Pulsar external connectivity deployed within a Minikube environment.
 ---
-Github Project: [https://github.com/t-snyder/learn-07-pulsar](https://github.com/t-snyder/learn-07-pulsar)
+Github Project: [https://github.com/t-snyder/deploy-07-pulsar](https://github.com/t-snyder/deploy-07-pulsar)
 
 ## 1 - Project Purpose
 The purpose of this set of prototypes is to provide a set of simple working prototypes providing external (outside kubernetes) connectivity

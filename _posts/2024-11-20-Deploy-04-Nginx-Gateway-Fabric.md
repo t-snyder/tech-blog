@@ -1,10 +1,10 @@
 ---
 layout: readme
-title: Learning-04 Nginx Gateway Fabric
+title: Deploy-04 Nginx Gateway Fabric
 pinned: false
 excerpt: Project deploying Nginx Gateway Fabric as the Kubernetes Gateway API controller. Project purpose is to learn about the implementation functionality.
 ---
-Github Project: [https://github.com/t-snyder/learn-04-nginx-gateway-fabric](https://github.com/t-snyder/learn-04-nginx-gateway-fabric)
+Github Project: [https://github.com/t-snyder/deploy-04-nginx-gateway-fabric](https://github.com/t-snyder/deploy-04-nginx-gateway-fabric)
 
 # Learn-04-Nginx-Gateway-Fabric
 
