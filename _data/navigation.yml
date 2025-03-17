@@ -5,3 +5,5 @@ main:
     url: /intro/
   - title: "Dependencies"
     url: /dependencies/
+  - title: "Coming Soon"
+    url: /coming/
