@@ -7,7 +7,7 @@ permalink: /about/
 # At the Beach - A Tech Blog
 
 This is just another humble tech blog that I use to document my various explorations
-now that I find I have have time on my hands to actually dive into things. So these
+now that I find I have time to actually dive into things. So these
 prototypes are generated between time spent swimming, sunbathing, sitting at the beach,
 drinking a beer, watching pretty girls walk by in bikinis, etc. 
 
@@ -34,10 +34,10 @@ I approach security within app deployments. Security must be multi level and des
 from the start.
 
 As mentioned above the theme of this blog is roughly security. But not is a unifying
-way. The prototypes included here are for the most part isolated components of potential 
-security solutions. 
+way. The prototypes included here are for the most part isolated components with potential 
+security implications. 
 
-In closing - Blogs which start with Learning have a deployable prototype behind them. Blogs
+In closing - Blogs which start with Deploy have a deployable prototype behind them. Blogs
 which start with Thoughts are pontifications on some subject of current interest.
 
 
