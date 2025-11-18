@@ -612,3 +612,13 @@ for pod in openbao-0 openbao-1 openbao-2; do
 done
 ```
 
+## 9. What This Blog Series Covers
+
+- **Blog 1**:  Architecture overview and problem space
+- **Blog 2**: Step-by-step installation and deployment guide
+- **Blog 3**: Service Permissions management - Static and Changeable
+- **Blog 4**: Automated Certificate Rotation (Intermediate + Leaf) and certificate management
+- **Blog 5**: OpenBao Integration and App Role token management
+- **Blog 6**: NATS messaging with short-lived keys and topic permissions
+- **Blog 7**: Alternative Architectures Tested
+
