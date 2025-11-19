@@ -21,14 +21,8 @@
 title: "At the Beach - Minikube Security Prototypes"
 email: tsnyder@contactoffice.com
 name: "Tim Snyder"
-url: "https://t-snyder.github.io/tech-blog"
-#doc_name: "Steps for Deploying the Prototype" 
-description: >- # this means to ignore newlines until "baseurl:"
-  The purpose of the prototype project is to demonstrate the configuration and use of 
-  ingress-nginx, and then increasing complexity with Cert-Manager and Pekko-Http within 
-  the minikube environment. The tests include http and https terminated at the ingress 
-  controller. Cert-manager is used to manage self-signed certificates for the TLS.
-#doc_url: "/_pages/README.md"
+#url: "https://t-snyder.github.io/tech-blog"
+#permalink: /:year/:month/:day/:title/
 github_username:  t-snyder
 search: true
 
@@ -47,6 +41,8 @@ repository: # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 #pagination.enabled: true
 #paginate: 5
 #paginate_path: /page:num
+
+permalink: pretty
 
 include:
   - _pages
