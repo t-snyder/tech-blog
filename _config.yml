@@ -21,8 +21,9 @@
 title: "At the Beach - Minikube Security Prototypes"
 email: tsnyder@contactoffice.com
 name: "Tim Snyder"
-#url: "https://t-snyder.github.io/tech-blog"
-#permalink: /:year/:month/:day/:title/
+url: "https://t-snyder.github.io"
+baseurl: "/tech-blog"
+permalink: pretty
 github_username:  t-snyder
 search: true
 
@@ -41,8 +42,6 @@ repository: # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 #pagination.enabled: true
 #paginate: 5
 #paginate_path: /page:num
-
-permalink: pretty
 
 include:
   - _pages
