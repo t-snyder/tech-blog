@@ -3,7 +3,7 @@ layout: readme
 title: Deploy-03 Basic Gateway API (Istio - Ambient Mode, Cert-Manager)
 pinned: false
 excerpt: Shell instructions for deploying Kubernetes Gateway API, Istio Ambient Mode, and Cert-Manager using HTTPRoute for Http and Https-terminated, and TLSRoute for Passthru.
-last_modified_at: 2024-12-01
+exclude_from_feed: true
 ---
 Github Project: [https://github.com/t-snyder/swploy-03-basic-gateway-api](https://github.com/t-snyder/deploy-03-basic-gateway-api)
 

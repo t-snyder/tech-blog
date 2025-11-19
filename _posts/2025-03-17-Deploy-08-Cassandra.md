@@ -1,6 +1,7 @@
 ---
 layout: readme
 title: Deploy-08 Cassandra Minikube with External Connections (Kube Gateway API, Cert-Manager, Istio Ambient Mode)
+exclude_from_feed: true
 pinned: false
 excerpt: A set of deployable prototypes targeting Cassandra external connectivity deployed within a Minikube environment.
 ---

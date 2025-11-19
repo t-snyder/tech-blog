@@ -1,6 +1,7 @@
 ---
 layout: readme
 title: Deploy-07 Pulsar Minikube with External Connections (Pulsar, Cert-Manager, Istio Ambient Mode)
+exclude_from_feed: true
 pinned: false
 excerpt: A set of deployable prototypes targeting Pulsar external connectivity deployed within a Minikube environment.
 ---

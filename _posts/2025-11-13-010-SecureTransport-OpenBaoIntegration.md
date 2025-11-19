@@ -1,6 +1,7 @@
 ---
 layout: readme
 title: Secure Transport Research Project - Part 5 - OpenBao Integration via Agent Sidecar
+exclude_from_feed: true
 pinned: false
 excerpt: "Deep dive into OpenBao integration: AppRole authentication with Agent sidecar, automatic token management, cert-manager TLS certificate issuance, secret storage and retrieval, and automatic secret-id rotation. Explores the complete lifecycle from Kubernetes configuration to application-level vault access."
 categories: [Security, Cryptography, Kubernetes]

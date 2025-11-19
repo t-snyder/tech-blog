@@ -1,6 +1,7 @@
 ---
 layout: readme
 title: Secure Transport Research Project - Part 3 - Service Authorization
+exclude_from_feed: true
 pinned: false
 excerpt: "Deep dive into the cryptographic authorization model: how services-acl-configmap defines permissions, how ServiceBundles package cryptographic material with embedded authorization, and how Kyber-based key exchange securely delivers bundles to services."
 categories: [Security, Cryptography, Kubernetes]

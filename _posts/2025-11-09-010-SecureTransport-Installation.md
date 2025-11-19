@@ -1,9 +1,9 @@
 ---
 layout: readme
 title: Secure Transport Research Project - Part 2 - Installation 
+exclude_from_feed: true
 pinned: false
-date: 2025-11-09 16:06:11 +0000
-categories: [Security, Cryptography, kubernetes, NATS, deployment]
+excerpt: "Provides the deployment instructions, requirements and background understanding how to deploy the Secure Transport research prototype"
 tags: [openbao, nats, mtls, multi-cluster]
 series: "SecureTransport Research Prototype"
 series_part: 2

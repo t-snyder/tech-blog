@@ -1,6 +1,7 @@
 ---
 layout: readme
 title: Secure Transport Research Project - Part 4 - Automated CA Certificate Rotation
+exclude_from_feed: true 
 pinned: false
 excerpt: "Deep dive into automated Intermediate CA Bundle Rotation: epoch-driven timing with CaEpochUtil, three-tier orchestration (Metadata generation, Watcher SIGHUP coordination, client reloads), zero-downtime certificate updates, and cryptographic guarantees for post-quantum readiness."
 categories: [Security, Cryptography, Kubernetes]

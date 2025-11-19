@@ -1,6 +1,7 @@
 ---
 layout: readme
 title: Secure Transport Research Project - Part 1 - Overview
+exclude_from_feed: true
 pinned: false
 excerpt: "A research prototype demonstrating automated Intermediate CA certificate rotation and high-frequency post-quantum key management in Kubernetes. Addresses the operational crisis of moving from yearly to hourly certificate rotation while implementing zero-trust architectures and PQC algorithms—validated under realistic message loads with zero-downtime guarantees."
 categories: [Security, Cryptography, Kubernetes]
@@ -212,10 +213,10 @@ The **Metadata service** provides a configurable and updateable services ACL whi
 readme
 ## 4. High-Level Architecture
 ### 4.1 The System at a Glance
-<img src="/assets/images/architecture-services.jpg" alt="Alt text" width="500">
+<img src="{{ '/assets/images/architecture-services.jpg' | relative_url }}" alt="SecureTransport Architecture - Services Overview showing Metadata Service, Watcher Service, and test harness components" width="500">
 
 ### 4.2 Deployment at a Glance
-<img src="/assets/images/architecture-deployment.jpg" alt="Alt text" width="500">
+<img src="{{ '/assets/images/architecture-deployment.jpg' | relative_url }}" alt="SecureTransport Deployment Architecture across three Minikube clusters with NATS, OpenBao, and Istio components" width="500">
 
 ### 4.3 Core Services and Responsibilities
 
@@ -384,7 +385,7 @@ Each technology was selected to solve a specific hard problem:
 
 ---
 
-## 7. What This Blog Series Covers
+## 8. What This Blog Series Covers
 
 - **Blog 1** (This Post): Architecture overview and problem space
 - **Blog 2**: Step-by-step installation and deployment guide
@@ -392,11 +393,291 @@ Each technology was selected to solve a specific hard problem:
 - **Blog 4**: Automated Certificate Rotation (Intermediate + Leaf) and certificate management
 - **Blog 5**: OpenBao Integration and App Role token management
 - **Blog 6**: NATS messaging with short-lived keys and topic permissions
-- **Blog 7**: Alternative Architectures Tested
 
 ---
 
-## 8. Conclusion
+## 9. Alternative Technologies Initially Tested
+The main alternatives tested were Pulsar for messaging and a messaging push model versus a pull model.
+
+### 9.1 Pulsar
+Pulsar is a fairly heavy weight but very fast messaging server. It is made up of multiple components
+- **Proxy Server** - Proxies client connections to various Brokers.
+- **Broker Service** - Main messaging component
+- **Bookie Service** - Persistence layer
+- **Toolset** - Administration
+- **Zookeeper** - Distributed configuration / leader election
+
+While not all of these components need to be rotated with CA rotation, the Proxy and Broker service pods at a 
+minimum must participate. Order is important, first the Brokers need to perform a
+rolling restart, and then the Proxy pods. When the brokers restart the proxy connections to the brokers
+are terminated, which terminates client connections to the Proxy. The proxy will try restarting and
+eventually it will be successful as the broker pods come back online. 
+
+- **Testing Experience** - It takes 1 - 3 minutes **(not seconds)** for the complete rotation to finalize. Given the frequency for the rotations we are seeking this was not acceptable.
+
+
+### 9.1.1 Pulsar Architecture (Complex)
+```
+Producer/Consumer --> Proxy Layer (optional but beneficial)
+                  --> Broker (stateful)
+                      ├── BookKeeper (persistent storage)
+                      ├── ZooKeeper (coordination)
+                      └── Multiple connection types
+                          ├── Client connections
+                          ├── Proxy-to-broker
+                          ├── Broker-to-broker
+                          ├── Broker-to-BookKeeper
+                          └── Broker-to-ZooKeeper
+```
+
+### 9.1.2. **Stateful Connection Model**
+
+**Pulsar:**
+- **Stateful broker connections** with:
+  - Persistent subscription cursors
+  - Message acknowledgment tracking
+  - Partitioned topic routing state
+  - Consumer group coordination
+  - Backlog tracking per subscription
+
+- CA rotation requires:
+  - Draining in-flight messages
+  - Persisting acknowledgment state
+  - Coordinating reconnection across partitions
+  - Handling consumer rebalancing
+  - Managing backlog during transition
+
+### 9.1.3 Partitioned Topic Complexity
+
+**Pulsar:**
+- Topics can have 100+ partitions
+- Each partition = separate broker connection
+- CA rotation requires:
+  - Reconnecting to each partition broker
+  - Coordinating across partition producers/consumers
+  - Handling partial rotation failures
+  - Managing message ordering across partitions during transition
+
+**Example with 100 partitions:**
+- 100 broker connections to update
+- Each broker may be at different CA rotation stage
+- Producer must track which brokers have rotated
+- Risk of message duplication if partition ownership changes
+
+
+## 9.2 Push vs. Pull Message Models: Complexity During CA Rotation
+Push and pull messaging models represent fundamentally different approaches to message delivery, and these differences become particularly evident during critical infrastructure operations like Certificate Authority (CA) rotation.
+
+### 9.2.1 Push Model
+
+#### How It Works
+In the push model, the message broker **actively sends** messages to consumers:
+- The broker maintains connections to all subscribers
+- Messages are delivered as soon as they arrive
+- The broker tracks which consumers have received which messages
+- Consumers are "pushed" data whether they're ready or not
+
+#### Characteristics
+- **Low latency**: Messages arrive immediately
+- **Connection-oriented**: Broker maintains persistent connections to consumers
+- **Broker controls flow**: The broker decides when to send messages
+
+### 9.2.2 Pull Model
+
+#### How It Works
+In the pull model, consumers **request** messages from the broker:
+- Consumers maintain connections to the broker
+- Consumers fetch messages when they're ready
+- The broker holds messages until requested
+- Consumers control their own consumption rate
+
+#### Characteristics
+- **Consumer-controlled**: Consumers decide when to fetch messages
+- **Natural backpressure**: Consumers only take what they can handle
+- **Simpler broker logic**: Broker primarily stores and serves on request
+
+### 9.3 Why Push Models Are More Complex During CA Rotation
+
+#### 9.3.1 Connection Ownership and Lifecycle
+
+**Push Model Problems:**
+- The broker owns outbound connections to all consumers
+- During CA rotation, the broker must:
+  - Identify which connections use old certificates
+  - Gracefully close existing connections
+  - Re-establish connections with new certificates
+  - Handle consumer unavailability during reconnection
+  - Manage different certificate versions across consumers
+
+**Pull Model Advantages:**
+- Consumers own the connections
+- Each consumer can independently:
+  - Reload updated CA bundles on their own schedule
+  - Close and reopen connections on their own schedule
+  - Retry with new certificates without broker coordination
+  - Handle their own failure scenarios
+
+#### 9.3.2 State Management Complexity
+
+**Push Model:**
+```
+Broker State:
+├── Consumer A (cert v1, in-flight msgs: 5, ack pending: 3)
+├── Consumer B (cert v2, in-flight msgs: 2, ack pending: 1)
+├── Consumer C (cert v1, disconnected, buffered msgs: 100)
+└── Consumer D (cert v2, connected, healthy)
+```
+
+The broker must track:
+- Which certificate version each consumer is using
+- In-flight messages per consumer
+- Acknowledgment state per consumer
+- Whether to allow connections with old certificates
+- Grace periods for certificate migration
+
+**Pull Model:**
+```
+Broker State:
+├── Messages in queue
+└── Accept connections with cert v1 OR cert v2
+```
+
+The broker only needs to:
+- Store messages
+- Accept connections from both old and new certificates (during rotation period)
+- Serve messages when requested
+
+#### 9.3.3 CA Bundle Management
+
+**The CA Bundle Approach:**
+During rotation, a CA bundle contains both the old and new CA certificates, allowing:
+- Overlapping validity periods (rotation happens before expiry)
+- Gradual rollout of new certificates
+- No service disruption during the transition
+- Time for all components to update
+
+**Push Model Complexity:**
+- Broker must manage CA bundle updates AND reconnection to all consumers
+- Each consumer endpoint must have updated CA bundle before broker reconnects
+- Broker must track which consumers have been updated
+- Coordination required: "Has consumer X updated its CA bundle yet?"
+- Failed reconnections require complex retry logic
+
+**Pull Model Simplicity:**
+- Broker updates its CA bundle to accept both old and new CAs
+- Consumers update their CA bundles independently
+- Existing connections continue to work
+- New connections use whatever cert the consumer has (both work)
+- No coordination needed between broker and consumers
+
+#### 9.3.4 Failure Modes and Recovery
+
+**Push Model Failure Scenarios:**
+- **Partial rotation failure**: Some consumers rotated, some didn't
+  - Broker must support both certificate versions simultaneously
+  - Risk of message duplication during reconnection
+  - Complex retry logic for failed deliveries
+  
+- **Connection storm**: All consumers disconnect/reconnect simultaneously
+  - Broker must handle massive reconnection load
+  - In-flight messages may be lost or duplicated
+  - Acknowledgment state becomes uncertain
+
+- **Consumer not reachable**: Consumer can't accept new certificate connection
+  - Broker must decide: buffer, drop, or retry?
+  - Memory pressure from buffered messages
+  - Timeout and eviction policies become critical
+
+**Pull Model Failure Scenarios:**
+- **Consumer fails to rotate**: Uses old certificate
+  - Broker rejects connection after grace period
+  - Consumer retries with new certificate (consumer problem, not broker problem)
+  - No message buffering needed
+
+- **Connection storm**: All consumers reconnect
+  - Stateless message serving scales naturally
+  - No in-flight tracking means simpler recovery
+  - Messages remain safely in queue
+
+### 9.4 NATS-Specific Pull Considerations
+
+#### NATS Core (Pull-like behavior via subscriptions):
+```java
+// Consumer manages its own connection
+Connection nc = Nats.connect(options);
+// During CA rotation:
+// 1. Operator issues new CA (months before old CA expires)
+// 2. CA bundle updated to include both old and new CA
+// 3. Consumers reload CA bundle at their own pace
+// 4. Consumers restart with new certs when convenient
+// 5. Subscriptions automatically re-establish on reconnect
+// 6. After rotation window, old CA removed from bundle
+```
+
+#### NATS JetStream (Pull consumers):
+```java
+// Explicit pull - consumer controls everything
+PullSubscribeOptions pullOptions = PullSubscribeOptions.builder()
+    .stream("mystream")
+    .build();
+
+JetStreamSubscription sub = js.subscribe("subject", pullOptions);
+
+// During CA rotation:
+sub.pull(10); // Consumer decides when to fetch
+// Consumer updates CA bundle independently
+// Connection management is entirely consumer-side
+// Broker accepts both old and new certs via CA bundle
+```
+
+### 9.5 Coordination and Timing Windows
+
+**Push Model:**
+- Requires coordinated rotation across broker and all consumers
+- Broker must know when consumers have updated CA bundles
+- Need for complex grace periods and dual-certificate support
+- Risk of split-brain scenarios
+- Complex rollback procedures
+- Tight coupling between broker and consumer update schedules
+
+**Pull Model:**
+- Rolling rotation possible with CA bundle
+- Each consumer updates CA bundle independently
+- Broker just needs CA bundle with both CAs
+- Simple rollback (extend CA bundle overlap period)
+- Loose coupling - no coordination needed
+- Natural support for gradual rollout
+
+### 9.6 Real-World Impact
+
+### 9.6.1 Operational Complexity
+- **Push**: Requires maintenance windows, coordination, monitoring dashboards for migration progress
+- **Pull**: Can happen during business hours, self-healing, minimal monitoring needed
+
+### 9.6.2 Failure Blast Radius
+- **Push**: Broker failure affects all consumers simultaneously
+- **Pull**: Consumer failures are isolated
+
+### 9.6.3 Scalability
+- **Push**: Complexity grows with O(n) consumers
+- **Pull**: Complexity remains O(1) regardless of consumer count
+
+## 9.6.4 Impact Conclusion
+
+The push model's fundamental issue is that it **inverts the natural flow of responsibility**: the broker becomes responsible for managing the lifecycle and state of connections it doesn't fully control. During CA rotation, this creates a distributed systems problem where the broker must coordinate state across potentially thousands of independent consumers.
+
+The pull model keeps responsibility at the edges: each consumer manages its own connection, certificate rotation, and failure recovery. The broker remains a simple, stateless message store that only needs to temporarily accept both old and new certificates during the rotation window.
+
+For systems like NATS, this is why JetStream's pull consumers and core NATS's consumer-controlled subscriptions make CA rotation a non-event rather than a complex orchestration challenge.
+
+**It should be noted that the pull model is essentially client driven server access. As such most servers which applications with significant technical foundations interact with use client driven access. Examples are data stores (postgres, cassandra, etc.) these are all client driven access.**
+
+
+## 10 Conclusion
+
+**Key Findings:**
+- **Server requires Sighup capability - not restarts** - In order to achieve a few second CA rotation servers must be able to reread configuration and responde to changes without having to restart.
+- **Client controls connections - not server** - In order to minimize rotation orchestration across multiple services the client needs to be in control of the connection and timing of requests.
 
 **Key Takeaways:**
 - This is a **research prototype** exploring solutions to real operational challenges

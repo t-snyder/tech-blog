@@ -6,16 +6,18 @@ layout: archive
 
 <h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
 
-{% if paginator %}
-  {% assign posts = paginator.posts %}
-{% else %}
-  {% assign posts = site.posts %}
-{% endif %}
+{% comment %}Filter out excluded posts first, then limit to recent 10{% endcomment %}
+{% assign posts = site.posts | where_exp: "post", "post.exclude_from_feed != true" | slice: 0, 10 %}
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 <div class="entries-{{ entries_layout }}">
   {% include documents-collection.html entries=posts type=entries_layout %}
 </div>
 
-{% include paginator.html %}
-
+{% comment %}Show link to full archive if there are more posts{% endcomment %}
+{% assign total_visible_posts = site.posts | where_exp: "post", "post.exclude_from_feed != true" | size %}
+{% if total_visible_posts > 10 %}
+<div class="pagination">
+  <a href="/archive/" class="btn btn--primary">View All Posts →</a>
+</div>
+{% endif %}

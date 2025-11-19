@@ -1,6 +1,7 @@
 ---
 layout: readme
 title: Secure Transport Research Project - Part 6 - SignedMessage Protocol
+exclude_from_feed: true 
 pinned: false
 excerpt: "Deep dive into the SignedMessage protocol: end-to-end message authentication and encryption using Dilithium signatures, AES-GCM-256 with HKDF key derivation, epoch-based key management, and cryptographic enforcement of authorization. Explores message creation, encryption, signature generation, decryption, and verification flows with automatic ServiceBundle recovery from OpenBao."
 categories: [Security, Cryptography, Kubernetes]
