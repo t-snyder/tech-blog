@@ -21,7 +21,7 @@
 title: "At the Beach - Minikube Security Prototypes"
 email: tsnyder@contactoffice.com
 name: "Tim Snyder"
-url: "https://t-snyder.github.io/tech-blog/"
+url: "https://t-snyder.github.io/tech-blog"
 #doc_name: "Steps for Deploying the Prototype" 
 description: >- # this means to ignore newlines until "baseurl:"
   The purpose of the prototype project is to demonstrate the configuration and use of 
