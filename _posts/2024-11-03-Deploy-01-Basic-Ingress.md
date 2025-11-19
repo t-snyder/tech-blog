@@ -3,6 +3,8 @@ layout: readme
 title: Deploy-01 Basic Ingress (Ingress-Nginx, Cert-Manager, Pekko-Http)
 excerpt: Prototype deploying basic ingress-ngingx ingress with both http and https termination. Uses ingress-nginx, cert-manager, pekko-http
 exclude_from_feed: true
+series: "Ingress and Kubernetes Gateway API"
+series_part: 1 
 ---
 Github Project: [https://github.com/t-snyder/deploy-01-basic-ingress](https://github.com/t-snyder/deploy-01-basic-ingress)
 

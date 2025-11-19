@@ -1,6 +1,7 @@
 ---
 layout: single
 title: "Server Deployment Learning Projects"
+date: 2025-03-25
 categories: [Kubernetes, Databases, Security]
 tags: [cassandra, pulsar, etcd, encryption, minikube]
 excerpt: "A collection of deployment prototypes exploring various server technologies including Apache Cassandra, Apache Pulsar, and Kubernetes etcd encryption in Minikube environments."
@@ -10,45 +11,15 @@ This series focuses on deploying and configuring various server technologies wit
 
 ## Series Overview
 
-### Security & Infrastructure
+{% assign sorted_posts = site.posts | where: "series", "Server Deployments" | sort: "series_part" %}
 
-#### [Deploy-06: Encrypt Etcd Minikube]({% post_url 2024-12-01-Deploy-06-Encrypt-Etcd-Minikube %})
-The purpose of the prototype is to provide a deployment of the Kubernetes Apiserver where the etcd store is encrypted.
+{% for post in sorted_posts %}
+### [Part {{ post.series_part }}: {{ post.title }}]({{ post.url | relative_url }})
 
-**Key Technologies:** Kubernetes API Server, etcd encryption  
-**Focus:** Securing Kubernetes cluster state with encryption at rest
-
-**Why This Matters:** Etcd stores all Kubernetes secrets and configuration. This prototype demonstrates how to encrypt this critical data store, a requirement for production security.
+{{ post.excerpt }}
 
 ---
-
-### Messaging Systems
-
-#### [Deploy-07: Apache Pulsar Connectivity]({% post_url 2025-02-27-Deploy-07-Apache-Pulsar-Connectivity %})
-Deployment prototype exploring Apache Pulsar connectivity and messaging patterns within Kubernetes.
-
-**Key Technologies:** Apache Pulsar, Kubernetes  
-**Focus:** High-throughput distributed messaging systems
-
-**Use Cases:** Event streaming, message queuing, pub-sub patterns for microservices
-
----
-
-### Database Systems
-
-#### [Deploy-08: Cassandra Minikube with External Connections]({% post_url 2025-03-17-Deploy-08-Cassandra %})
-A set of deployable prototypes targeting Cassandra external connectivity deployed within a Minikube environment.
-
-**Key Technologies:** Apache Cassandra, Kubernetes Gateway API, Cert-Manager, Istio Ambient Mode  
-**Focus:** Stateful database deployments with external client access
-
-**Deployment Features:**
-- StatefulSet configurations for Cassandra clusters
-- External connectivity via Gateway API
-- TLS-secured client connections
-- Certificate management with Cert-Manager
-
----
+{% endfor %}
 
 ## Common Infrastructure
 

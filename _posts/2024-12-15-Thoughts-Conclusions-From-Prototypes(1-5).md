@@ -4,6 +4,8 @@ title: Thoughts-01 Conclusions from Ingress/Gateway API Learning Prototypes 1-5
 exclude_from_feed: true
 excerpt: Conclusions reached from implementing Ingress and Gateway API prototypes with Cert-Manager, Vault and Istio (Ambient Mode)
 pinned: false
+series: "Ingress and Kubernetes Gateway API"
+series_part: 6
 ---
 
 ## Prototypes Explanation

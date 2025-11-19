@@ -4,6 +4,8 @@ title: Deploy-07 Pulsar Minikube with External Connections (Pulsar, Cert-Manager
 exclude_from_feed: true
 pinned: false
 excerpt: A set of deployable prototypes targeting Pulsar external connectivity deployed within a Minikube environment.
+series: "Server Deployments"
+series_part: 2
 ---
 Github Project: [https://github.com/t-snyder/deploy-07-pulsar](https://github.com/t-snyder/deploy-07-pulsar)
 

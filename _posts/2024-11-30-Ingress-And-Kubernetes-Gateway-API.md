@@ -1,6 +1,7 @@
 ---
 layout: single
 title: "Ingress and Kubernetes Gateway API Learning Projects"
+date: 2024-11-30
 categories: [Kubernetes, DevOps, Networking]
 tags: [ingress, gateway-api, istio, cert-manager, nginx, vault]
 excerpt: "A comprehensive series exploring Kubernetes ingress controllers, Gateway API implementations, and advanced certificate management with Cert-Manager, Vault, and Istio Ambient Mode."
@@ -12,54 +13,15 @@ This series of prototypes demonstrates the evolution from traditional Kubernetes
 
 The projects progress from basic ingress configurations to advanced Gateway API implementations with production-grade certificate management.
 
-### Basic Ingress Projects
+{% assign sorted_posts = site.posts | where: "series", "Ingress and Kubernetes Gateway API" | sort: "series_part" %}
 
-#### [Deploy-01: Basic Ingress (Ingress-Nginx, Cert-Manager, Pekko-Http)]({% post_url 2024-11-03-Deploy-01-Basic-Ingress %})
-Prototype deploying basic ingress-nginx ingress with both http and https termination. Uses ingress-nginx, cert-manager, pekko-http.
+{% for post in sorted_posts %}
+### [Part {{ post.series_part }}: {{ post.title }}]({{ post.url | relative_url }})
 
-**Key Technologies:** Ingress-Nginx, Cert-Manager, Pekko-Http  
-**Focus:** HTTP and HTTPS termination at ingress controller
-
----
-
-#### [Deploy-02: Advanced Ingress (Cert-Manager, Vault)]({% post_url 2024-11-07-Deploy-02-Advanced-Ingress %})
-Project deploying ingress-nginx ingress with both http and https-passthrough; Cert-Manager and Hashicorp Vault CA.
-
-**Key Technologies:** Ingress-Nginx, Cert-Manager, Vault CA  
-**Focus:** Certificate lifecycle management with Vault as CA
+{{ post.excerpt }}
 
 ---
-
-### Gateway API Projects
-
-#### [Deploy-03: Basic Gateway API (Istio - Ambient Mode, Cert-Manager)]({% post_url 2024-11-15-Deploy-03-Basic-Gateway-API %})
-Shell instructions for deploying Kubernetes Gateway API, Istio Ambient Mode, and Cert-Manager using HTTPRoute for Http and Https-terminated, and TLSRoute for Passthrough.
-
-**Key Technologies:** Kubernetes Gateway API, Istio Ambient Mode, Cert-Manager  
-**Focus:** Introduction to Gateway API with Istio implementation
-
----
-
-#### [Deploy-04: Nginx Gateway Fabric]({% post_url 2024-11-20-Deploy-04-Nginx-Gateway-Fabric %})
-Project deploying Nginx Gateway Fabric as the Kubernetes Gateway API controller. Project purpose is to learn about the implementation functionality.
-
-**Key Technologies:** Nginx Gateway Fabric, Gateway API  
-**Focus:** Alternative Gateway API implementation comparison
-
----
-
-#### [Deploy-05: Advanced Gateway API (Istio Ambient Mode, Cert-Manager, Vault)]({% post_url 2024-11-26-Deploy-05-Advanced-Gateway-API %})
-A functional prototype using Kubernetes Gateway API supporting TLS Termination and Passthrough. Built using Istio (Ambient Mode), Cert-Manager and Hashicorp Vault for certificate lifecycle management and signing TLS certificates within a Minikube environment.
-
-**Key Technologies:** Istio Ambient Mode, Cert-Manager, Vault, Gateway API  
-**Focus:** Production-ready Gateway API with automated certificate management
-
----
-
-#### [Thoughts and Conclusions from Ingress/Gateway API Learning Prototypes 1-5]({% post_url 2024-12-15-Thoughts-Conclusions-From-Prototypes(1-5) %})
-Conclusions reached from implementing Ingress and Gateway API prototypes with Cert-Manager, Vault and Istio (Ambient Mode)
-
----
+{% endfor %}
 
 ## Learning Path
 
@@ -68,6 +30,7 @@ Conclusions reached from implementing Ingress and Gateway API prototypes with Ce
 3. **Move to Deploy-03** to understand Gateway API fundamentals
 4. **Explore Deploy-04** to compare different Gateway API implementations
 5. **Complete with Deploy-05** for production-ready configurations
+6. **Review Thoughts and Conclusions** for lessons learned
 
 ## Common Infrastructure
 

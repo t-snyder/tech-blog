@@ -4,6 +4,8 @@ title: Deploy-06 Encrypt Etcd Minikube
 exclude_from_feed: true
 pinned: false
 excerpt: The purpose of the prototype is to provide a deployment of the Kubernetes Apiserver where the etcd store is encrypted.
+series: "Server Deployments"
+series_part: 1
 ---
 Github Project: [https://github.com/t-snyder/deploy-06-encrypt-etcd-minikube](https://github.com/t-snyder/deploy-06-encrypt-etcd-minikube)
 

@@ -4,6 +4,8 @@ title: Deploy-04 Nginx Gateway Fabric
 pinned: false
 excerpt: Project deploying Nginx Gateway Fabric as the Kubernetes Gateway API controller. Project purpose is to learn about the implementation functionality.
 exclude_from_feed: true
+series: "Ingress and Kubernetes Gateway API"
+series_part: 4
 ---
 Github Project: [https://github.com/t-snyder/deploy-04-nginx-gateway-fabric](https://github.com/t-snyder/deploy-04-nginx-gateway-fabric)
 

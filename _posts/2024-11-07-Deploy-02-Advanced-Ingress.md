@@ -4,6 +4,8 @@ title: Deploy-02 Advanced Ingress (Cert-Manager, Vault)
 pinned: false
 excerpt: Project deploying ingress-ngingx ingress with both http and https-passthru only; Cert-Manager and Hashicorp Vault CA.
 exclude_from_feed: true
+series: "Ingress and Kubernetes Gateway API"
+series_part: 2 
 ---
 Github Project: [https://github.com/t-snyder/deploy-02-advanced-ingress](https://github.com/t-snyder/deploy-02-advanced-ingress)
 

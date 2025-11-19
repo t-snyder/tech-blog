@@ -4,6 +4,8 @@ title: Deploy-08 Cassandra Minikube with External Connections (Kube Gateway API,
 exclude_from_feed: true
 pinned: false
 excerpt: A set of deployable prototypes targeting Cassandra external connectivity deployed within a Minikube environment.
+series: "Server Deployments"
+series_part: 3
 ---
 Github Project: [https://github.com/t-snyder/deploy-08-cassandra](https://github.com/t-snyder/deploy-08-cassandra)
 
