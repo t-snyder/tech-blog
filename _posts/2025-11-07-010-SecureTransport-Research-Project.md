@@ -16,6 +16,7 @@ This multi-part series covers:
 {% assign sorted_posts = site.posts | where: "series", "SecureTransport Research Prototype" | sort: "series_part" %}
 
 {% for post in sorted_posts %}
-### [Part {{ post.series_part }}: {{ post.title | remove: "Secure Transport Research Project - " | remove: "Part " | remove: post.series_part | remove: " - " }}]({{ post.url }})
+### [Part {{ post.series_part }}: {{ post.title | remove: "Secure Transport Research Project - " | remove: "Part " | remove: post.series_part | remove: " - " }}]({{ post.url | relative_url }})
+
 {{ post.excerpt }}
 {% endfor %}
