@@ -14,7 +14,11 @@ series_part: 4
 
 ## Introduction
 
-In traditional PKI deployments, certificate rotation is a manual, high-risk operation typically performed yearly or quarterly. Administrators schedule maintenance windows, update certificate files, restart services, and hope nothing breaks. This model is incompatible with modern zero-trust architectures that demand **hourly or daily certificate rotation** to minimize the blast radius of compromised credentials.
+In traditional service PKI deployments, certificate rotation is a manual, 
+high-risk operation typically performed yearly or quarterly. More sophisticated
+organizations with larger service bases may use Cert-manager for managing certficate
+rotation for leaf certificates. However when Intermediate certificates are rotated,
+Administrators schedule maintenance windows, update certificate files, restart services, and hope nothing breaks. This model is incompatible with modern zero-trust architectures that demand **hourly or daily certificate rotation** to minimize the blast radius of compromised credentials.
 
 SecureTransport's Intermediate CA rotation system demonstrates that **fully automated, zero-downtime certificate rotation** is not just theoretically possible—it's operationally viable for distributed microservices architectures. The system achieves this through:
 
@@ -147,7 +151,7 @@ public class CaEpochUtil {
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    CA Certificate Lifecycle                              │
+│                    CA Certificate Lifecycle                             │
 └─────────────────────────────────────────────────────────────────────────┘
 
   Epoch 100       Epoch 101       Epoch 102       Epoch 103       Epoch 104
@@ -912,7 +916,10 @@ All 4 epochs have valid certificates!
 
 **Problem:** What if service clocks are out of sync?
 
-**Solution:** 4-epoch overlap + grace periods
+**Solution:** 
+- All Messages contain the epoch it was generated at
+- All Messages contain the TopicKeyId. The key can be retrieved by Id.
+- 4-epoch overlap + grace periods
 
 ```java
 Set<Long> validEpochs = CaEpochUtil.getValidCaEpochs(Instant.now());
@@ -1162,16 +1169,15 @@ Moving from yearly certificate rotation to hourly/daily rotation is **operationa
 
 - **Blog 5**: OpenBao Integration and App Role token management
 - **Blog 6**: NATS messaging with short-lived keys and topic permissions
-- **Blog 7**: Alternative Architectures Tested
 
 ---
 
 **Explore the code:**
-- [CaRotationVert.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-metadata/src/main/java/verticle/CaRotationVert.java)
+- [CaRotatorVert.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-metadata/src/main/java/verticle/CaRotatorVert.java)
 - [CaBundleConsumerVert.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-watcher/src/main/java/verticle/CaBundleConsumerVert.java)
 - [NatsCaBundleMsgProcessor.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-watcher/src/main/java/processor/NatsCaBundleMsgProcessor.java)
-- [CaBundleUpdateVert.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-core/src/main/java/core/verticle/CaBundleUpdateVert.java)
-- [CaEpochUtil.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-core/src/main/java/core/utils/CaEpochUtil.java)
+- [CABundleUpdateVert.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-core/src/main/java/core/verticle/CABundleUpdateVert.java)
+- [CAEpochUtil.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-core/src/main/java/core/utils/CAEpochUtil.java)
 
 ---
 

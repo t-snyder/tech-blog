@@ -15,17 +15,72 @@ series_part: 1
 ## Introduction
 
 SecureTransport is a research prototype demonstrating automated rotation of 
-both leaf and Intermediate CA certificates and high-frequency encryption keys in a 
-Kubernetes-native microservices architecture. Built on Vert.x 5.0, NATS messaging, and Cert-Manager, it addresses the operational challenges of transitioning from yearly to hourly/daily certificate rotation while implementing post-quantum cryptography (Kyber/Dilithium). The system achieves zero-downtime security updates through event-driven coordination, cryptographic authorization enforcement via signed ServiceBundles, and epoch-based key management with overlapping validity windows—validated continuously by high-throughput test services that prove correctness during rotation events.
+both leaf and Intermediate CA certificates and high-frequency encryption keys 
+in a Kubernetes-native microservices architecture. Built on Vert.x 5.0, NATS 
+messaging, Fabric8 Kubernetes Client, Istio Ambient Mode and Cert-Manager, 
+it addresses the operational challenges of transitioning from yearly to 
+hourly/daily certificate rotation while implementing post-quantum cryptography 
+(Kyber/Dilithium) secure future quarantees. The system achieves zero service downtime security updates 
+through event-driven coordination, cryptographic authorization enforcement via 
+signed ServiceBundles, and epoch-based key management with overlapping validity 
+windows — validated continuously by high-throughput test services that prove 
+correctness during rotation events.
 
 ### 1.1 The New Threat Reality
-The internet security threat landscape is undergoing a fundamental transformation driven by converging forces: state-sponsored Advanced Persistent Threat (APT) groups now operate with nation-state resources and multi-year campaign timelines, while the impending arrival of cryptographically-relevant quantum computers threatens to break the RSA and elliptic curve cryptography protecting decades of encrypted data through "harvest now, decrypt later" attacks. Simultaneously, the attack surface has exploded—cloud-native architectures with ephemeral microservices, IoT device proliferation, and remote work infrastructure create millions of new vulnerability points, while AI-powered automated exploitation tools enable adversaries to discover and weaponize zero-days faster than defenders can patch. Certificate authorities and browser vendors are responding by mandating increasingly short certificate lifespans (from years to 90 days, with proposals for daily rotation), forcing organizations into an automation-or-die scenario where manual PKI management becomes operationally impossible. This perfect storm—sophisticated adversaries, quantum threats, massive attack surfaces, and compressed security lifecycles—demands not incremental improvements but fundamental architectural changes: cryptographic agility to swap algorithms on-demand, zero-trust models that verify continuously rather than authenticate once, and post-quantum cryptography deployed today to protect against tomorrow's quantum capabilities.
+The internet security threat landscape is undergoing a fundamental transformation 
+driven by converging forces: state-sponsored Advanced Persistent Threat (APT) 
+groups now operate with nation-state resources and multi-year campaign timelines, 
+while the impending arrival of cryptographically-relevant quantum computers 
+threatens to break the RSA and elliptic curve cryptography protecting decades of 
+encrypted data through "harvest now, decrypt later" attacks. Simultaneously, the 
+attack surface has exploded — cloud-native architectures with ephemeral 
+microservices, IoT device proliferation, and remote work infrastructure, hybrid self hosted 
+/ and multi vendor clusters create millions of new vulnerability points, while 
+AI-powered automated exploitation tools enable adversaries to discover and 
+weaponize zero-days and mis-configured clusters faster than defenders can patch. 
+Certificate authorities and browser vendors are responding by mandating 
+increasingly short certificate lifespans (from years to 90 days, with proposals 
+for daily rotation), forcing organizations into an automation-or-die scenario 
+where manual PKI management becomes operationally impossible. This perfect 
+storm—sophisticated adversaries, quantum threats, massive attack surfaces, and 
+compressed security lifecycles—demands not incremental improvements but 
+fundamental architectural changes: cryptographic agility to swap algorithms 
+on-demand, zero-trust models that verify continuously rather than authenticate 
+once, and post-quantum cryptography deployed today to protect against tomorrow's 
+quantum capabilities.
 
 ### 1.2 Industry Response
 
 The cybersecurity industry is responding to these escalating threats with a fundamental reimagining of trust models and cryptographic infrastructure. Certificate authorities and browser vendors have aggressively shortened maximum certificate lifespans—Apple's Safari and Google Chrome now enforce 398-day maximums (down from multi-year certificates), with industry momentum pushing toward 90-day validity periods by 2027 and experimental deployments testing daily or even hourly rotation. In parallel, NIST finalized its post-quantum cryptography standards in 2024, selecting ML-KEM (Kyber) for key encapsulation and ML-DSA (Dilithium) for digital signatures, triggering a multi-year migration timeline where organizations must implement hybrid classical+PQC schemes while managing the operational burden of 5-38x larger cryptographic artifacts. Regulatory frameworks are codifying these changes—the EU's NIS2 Directive, CISA's post-quantum roadmap, and emerging financial services regulations all mandate cryptographic agility: the ability to swap encryption algorithms, key sizes, and certificate authorities without application rewrites or service disruptions.
 
 Zero-trust architectures represent perhaps the most profound shift, abandoning the perimeter-based "castle and moat" security model that dominated for decades. Traditional networks assumed anything inside the firewall could be trusted—authenticate once at the VPN gateway, then freely access internal resources. Zero-trust inverts this: "never trust, always verify" means every request, every microservice call, every data access requires fresh cryptographic proof of identity and authorization, regardless of network location. In practice, this demands continuous authentication (short-lived credentials that expire in minutes or hours, not days), microsegmentation (cryptographically enforced boundaries between every service), and policy-based access control where permissions are cryptographically bound to identity tokens rather than network addresses or firewall rules. For certificate-based systems, zero-trust means frequent rotation isn't just a security improvement—it's a functional requirement, since long-lived certificates create windows where compromised credentials remain valid. This architectural shift, combined with PQC migration and compressed certificate lifespans, creates the operational crisis SecureTransport addresses: how do you rotate certificates and keys hundreds of times more frequently than before, across distributed microservices, with zero downtime and cryptographic proof of correctness?
+
+Most TLS vendors including open source projects are actively including Post-Quantum support
+into their TLS/SSL offerings as mostly alpha and beta functionality. As an example for open source projects:
+- **1. Open Quantum Safe (OQS) Projects:**
+   - OQS-OpenSSL - A fork of OpenSSL with post-quantum key exchange and authentication
+   - OQS-BoringSSL - Integration with Google's BoringSSL
+   - liboqs - C library for quantum-resistant cryptographic algorithms
+
+- **2. wolfSSL**
+   - Supports post-quantum algorithms including Kyber, Dilithium, and others
+   - Active development for PQC integration
+
+- **3. BoringSSL (Google)**
+   - Has experimental support for post-quantum key exchange (Kyber)
+   - Used in Chrome for PQC experiments
+
+- **4. s2n-tls (Amazon)**
+   - AWS's TLS implementation with post-quantum support
+   - Supports hybrid key exchange with Kyber
+
+- **5. Bouncy Castle**
+   - Java/C# cryptography library with PQC algorithm support
+
+- **6. PQConnect**
+   - Post-quantum enabled TLS libraries and tools
+
+
 
 **The Bottom Line:** The security practices that worked for the last decade won't protect us in the next one.
 
@@ -37,9 +92,8 @@ Moving to short-lived certificates and post-quantum encryption sounds simple in 
 
 **The Challenge:** Moving from yearly to 90-day certificates means 4x more renewals; daily rotation is 365x more operations; hourly rotation exceeds 1000x. Manual processes that worked before now guarantee outages, yet coordination across dozens of microservices with zero downtime tolerance makes automation non-trivial.
 
-**SecureTransport's Approach:** Cert-Manager automates leaf issuance while the Metadata service generates Intermediate CA bundles with epoch-based rotation (20-minute cycles, 80-minute validity). The Watcher service coordinates NATS certificate updates via pod reconfiguration (SIGHUP, not restart). Topic encryption keys rotate every 15 minutes with 1-hour validity, orchestrated through event-driven architecture.
+**SecureTransport's Approach:** Cert-Manager automates leaf certificate issuance while the Metadata service generates Intermediate CA bundles with epoch-based rotation (20-minute cycles, 80-minute validity). The Watcher service coordinates NATS certificate updates via pod reconfiguration (SIGHUP, not restart). Topic encryption keys rotate every 15 minutes with 1-hour validity, orchestrated through event-driven architecture.
 
----
 
 #### **Problem 2: Post-Quantum Cryptography Overhead**
 
@@ -47,7 +101,6 @@ Moving to short-lived certificates and post-quantum encryption sounds simple in 
 
 **SecureTransport's Approach:** Vert.x 5.0's reactive architecture prevents thread blocking from PQC operations. NATS provides efficient transport, Avro serialization minimizes message overhead, and Caffeine caching reduces repeated cryptographic operations. The system was designed for PQC from day one, not retrofitted.
 
----
 
 #### **Problem 3: PKI Infrastructure Strain**
 
@@ -55,11 +108,10 @@ Moving to short-lived certificates and post-quantum encryption sounds simple in 
 
 **SecureTransport's Approach:** The Metadata service generates Intermediate CA bundles using OpenBao PKI, reducing external CA dependencies. The Watcher coordinates NATS certificate rotation without pod restarts. Local certificate caching and pre-renewal before expiration windows minimize CA load spikes.
 
----
 
 #### **Problem 4: Key Management at High Frequency**
 
-**The Challenge:** Short-lived keys (hours, not years) require constant cryptographically-secure generation and gap-free distribution across microservices. Clock drift causes "key not valid yet" errors, race conditions emerge during rotation windows, and every rotation cycle creates failure opportunities.
+**The Challenge:** Short-lived keys (hours or minutes, not years) require constant cryptographically-secure generation and gap-free distribution across microservices. Clock drift causes "key not valid yet" errors, race conditions emerge during rotation windows, and every rotation cycle creates failure opportunities.
 
 **SecureTransport's Approach:** Every SignedMessage includes topic keyId, epoch, signing keyId, and service identifier—authorized services can fetch missing keys on-demand. Overlapping validity windows (15-minute rotation, 1-hour expiry) maintain multiple concurrent valid keys. 100-minute retention windows handle clock drift, with automatic epoch calculation and NATS-based synchronization backed by OpenBao storage.
 
@@ -72,7 +124,6 @@ TopicKey {
   role:        "current"  // current, next, or legacy
 }
 ```
----
 
 #### **Problem 5: Authorization in a Rotating World**
 
@@ -96,7 +147,7 @@ TopicPermission {
 
 1. **Intermediate CA certificate rotation** (main innovation - not just leaf certificates)
    - Intermediate Certificates are generally what clients use for authenticating servers during TLS handshakes
-2. **Short-lived intermediate certificate automation** (90 days to hourly/daily rotation)
+2. **Short-lived intermediate certificate automation** (90 days to minutes/hourly/daily rotation)
 3. **Post-quantum cryptography at scale** (Kyber + Dilithium)
 4. **High-frequency key rotation** (15-minute rotation, 1-hour expiry) - AES-GCM-256 with HKDF
 5. **Cryptographic authorization enforcement** (not just authentication)
@@ -137,16 +188,16 @@ TopicPermission {
 - Key/cert epoch transitions are monitored, enforced, and cryptographically provable.
 
 **3. Short-Lived, Automated Generation and Rotation of Encryption and Signing Keys**
-- Encryption and Signing keys are created within the Metadata service using the authoization matrix in 2 above.
+- Encryption and Signing keys are created within the Metadata service using the authorization matrix in 2 above.
 - Transport and topic encryption keys rotate as frequently as sub hourly to multi-hour or daily.
 - Overlapping valid keys are managed via epochs for smooth rollovers.
 
 **4. OpenBao AppRole Access**
 - OpenBao uses AppRole access which support cross cluster access.
-- Requires strict explicit path capabilities authorization.
+- Requires strict / explicit path capabilities authorization.
 - Each service periodically updates their token and secret key with OpenBao
 
-#### Distinctives
+#### Summary
 - Focus on automating intermediate CA rotation, not just standard leaf certs.
 - PQC support (Kyber/Dilithium) for post-quantum readiness.
 - Cryptographic authorization, not just authentication.
@@ -179,7 +230,7 @@ public class ServiceBundle {
 ### 3.2.2 The SignedMessage
 
 Every message carries cryptographic proof of authenticity and authorization:
-- **Dilithium signature** proving sender identity
+- **Dilithium signature** proving sender identity and content correctness
 - **Epoch-based key references** for validation
 - **Encrypted payload** using topic-specific keys with HKDF
 - **CA epoch tracking** for certificate validation
@@ -210,7 +261,7 @@ The **Metadata service** provides a configurable and updateable services ACL whi
 
 *Detailed in Blog 4*
 
-readme
+
 ## 4. High-Level Architecture
 ### 4.1 The System at a Glance
 <img src="{{ '/assets/images/architecture-services.jpg' | relative_url }}" alt="SecureTransport Architecture - Services Overview showing Metadata Service, Watcher Service, and test harness components" width="500">
@@ -223,8 +274,9 @@ readme
 #### Metadata Service (The Authority)
 
     Maintains authorization matrix defining service-to-service communication
-    Generates and signs ServiceBundles for all services defining and implementing service permissions.
+    Generates and signs each service's ServiceBundles - thus implementing service permissions.
     Creates topic encryption keys with embedded permissions
+    Creates signing keys - both public and private
     Publishes Intermediate CA certificate bundles
     The brain of the security infrastructure
     Detailed in Blog 3 & 4
@@ -235,7 +287,7 @@ readme
     Orchestrates NATS certificate rotation across the cluster
     Triggers NATS pod updates when CA bundles change
     Ensures zero-downtime during certificate rotation
-    The orchestrator of rotation events
+    The orchestrator of the Nats rotation events
     Detailed in Blog 4
 
 #### Service Core (The Foundation)
@@ -250,7 +302,7 @@ readme
 
 ### 4.4 Test/Demonstration Services
 
-To validate the system under realistic load and prove correctness during rotation events, the prototype includes two test harness services:
+To validate the system under realistic load and prove correctness during service bundle and rotation events, the prototype includes two test harness services:
 
 #### Gatekeeper Service (Load Generator)
 
@@ -294,7 +346,7 @@ Each technology was selected to solve a specific hard problem:
 
   **NATS -** High-performance messaging with native mTLS, low latency, and support for dynamic certificate reloading
 
-  **Cert-Manager -** Industry-standard Kubernetes certificate automation; handles leaf certificate issuance and renewal (6-hour duration, 3-hour renewal)
+  **Cert-Manager -** Industry-standard Kubernetes certificate automation; handles leaf certificate issuance and renewal (6-hour duration, 3-hour renewal) - **Note** - CA certificate rotation overrides this as new Leaf certificates need to be generated.
 
   **OpenBao -** FIPS-compliant secrets management (HashiCorp Vault open-source fork); provides secure token distribution via sidecar agents
 
@@ -310,49 +362,48 @@ Each technology was selected to solve a specific hard problem:
 ## 5. Design Philosophy: Built for Reality
 
 - **Principle 1: Event-Driven**
+   - Services react to certificate/key changes via NATS events
+   - Immediate propagation of security updates across the cluster
 
-    Services react to certificate/key changes via NATS events
-    Immediate propagation of security updates across the cluster
-
+---
 - **Principle 2: Cryptographic Enforcement, Not Policy**
+   - Authorization tied to key possession, not ACL checks
+   - No centralized permission service bottleneck
+   - If you don't have the topic key, you can't decrypt the message - mathematically enforced
 
-    Authorization tied to key possession, not ACL checks
-    No centralized permission service bottleneck
-    If you don't have the topic key, you can't decrypt the message - mathematically enforced
-
+---
 - **Principle 3: Graceful Degradation**
+   - Overlapping key validity prevents gaps (1-hour expiry, 15-minute rotation = 4 concurrent valid keys)
+   - Multi epoch retention window handles clock drift
+   - Automatic fallback to previous epochs on validation errors
 
-    Overlapping key validity prevents gaps (1-hour expiry, 15-minute rotation = 4 concurrent valid keys)
-    Multi epoch retention window handles clock drift
-    Automatic fallback to previous epochs on validation errors
-
+---
 - **Principle 4: Zero-Trust Messaging**
+   - Every message carries cryptographic proof (Dilithium signature)
+   - No implicit trust between services
+   - Continuous verification, not "authenticate once"
+   - Receiver must have access to both encryption key (with hkdf info) and signing public key.
+   - With AES-GCM-256 HKDF and key rotation every 15 minutes - the blast radius for key compromise is dramatically reduced
 
-    Every message carries cryptographic proof (Dilithium signature)
-    No implicit trust between services
-    Continuous verification, not "authenticate once"
-    Receiver must have access to both encryption key (with hkdf info) and signing public key
-    With AES-GCM-256 HKDF and key rotation every 15 minutes - the blast radius is dramatically reduced
-
+---
 - **Principle 5: Operational Automation**
+   - No manual certificate management
+   - Self-healing rotation processes
+   - Observable state transitions via logs and metrics
+   - Test harness (gatekeeper ↔ authController) validates every rotation
 
-    No manual certificate management
-    Self-healing rotation processes
-    Observable state transitions via logs and metrics
-    Test harness (gatekeeper ↔ authController) validates every rotation
-
+---
 - **Principle 6: No Service Downtime for Rotations**
-
-    Services should not require downtime / restarts for Certificate or Key rotations
-    Message processing interruptions should be a few seconds only for the TLS reconnection, and consumer rotation
-    Rotations should manage retries until successful with expanding wait times
+   - Services should not require downtime / restarts for Certificate or Key rotations
+   - Message processing interruptions should be a few seconds only for the TLS reconnection, and consumer recreation
+   - Rotations should manage retries until successful with expanding wait times
     
+---
 - **Principle 7: Test What You Fly**
-
-    Realistic message loads during development
-    Continuous validation of rotation correctness
-    Performance metrics under PQC overhead
-    Early detection of race conditions and edge cases
+   - Realistic message loads during development
+   - Continuous validation of rotation correctness
+   - Performance metrics under PQC overhead
+   - Early detection of race conditions and edge cases
 
 
 ---
@@ -367,10 +418,10 @@ Each technology was selected to solve a specific hard problem:
 | **Service Downtime** | Acceptable | None |
 | **Messaging Downtime** | Acceptable to pod restart | Goal - 1 to 5 seconds |
 | **PQC Overhead** | Accept performance hit | Reactive architecture + caching |
-| **Key Distribution** | Push to all services | Pull-based ServiceBundle model, pull backup |
+| **Key Distribution** | Push to all services | Pull-based ServiceBundle model, openbao pull backup |
 | **Clock Drift** | Tight time windows | Multi epoch retention, overlapping validity |
 | **Authorization** | Policy-based checks | Cryptographic enforcement via key distribution |
-| **CA Load** | Direct CA queries | Cert-Manager buffering + local caching |
+| **CA Load** | Direct CA queries | OpenBao PKI, Cert-Manager  |
 | **Monitoring** | Manual certificate checks | Proactive expiration detection |
 | **Rollback** | Manual intervention | Epoch-based automatic fallback |
 
@@ -382,6 +433,7 @@ Each technology was selected to solve a specific hard problem:
 - **Service Core** - The functionality within the service core and especially the verticles which is supports need to be abstracted into a Service Core class which an end service can extend for its own functionality.
 - **Test Cases** - The true test cases are the Gatekeeper and AuthController services.
 - **Service Identity** - Needs significant improvement, currently just a string Id.
+- **TLS Algorithms** - TLS with PQC Hybrid Algorithms are not included within the Prototype. 
 
 ---
 
@@ -407,13 +459,13 @@ Pulsar is a fairly heavy weight but very fast messaging server. It is made up of
 - **Toolset** - Administration
 - **Zookeeper** - Distributed configuration / leader election
 
-While not all of these components need to be rotated with CA rotation, the Proxy and Broker service pods at a 
+While not all of these components need to be rotated with CA rotation (depending upon inter-component tls configuration), the Proxy and Broker service pods at a 
 minimum must participate. Order is important, first the Brokers need to perform a
 rolling restart, and then the Proxy pods. When the brokers restart the proxy connections to the brokers
 are terminated, which terminates client connections to the Proxy. The proxy will try restarting and
 eventually it will be successful as the broker pods come back online. 
 
-- **Testing Experience** - It takes 1 - 3 minutes **(not seconds)** for the complete rotation to finalize. Given the frequency for the rotations we are seeking this was not acceptable.
+- **Testing Experience** - It takes 1 - 3 minutes **(not seconds)** for the complete rotation to finalize. Given the frequency for the CA rotations we are seeking, this was not acceptable.
 
 
 ### 9.1.1 Pulsar Architecture (Complex)
@@ -676,7 +728,7 @@ For systems like NATS, this is why JetStream's pull consumers and core NATS's co
 ## 10 Conclusion
 
 **Key Findings:**
-- **Server requires Sighup capability - not restarts** - In order to achieve a few second CA rotation servers must be able to reread configuration and responde to changes without having to restart.
+- **Server requires Sighup capability - not restarts** - In order to achieve a few second CA rotation servers must be able to reread configuration and respond to changes without having to restart.
 - **Client controls connections - not server** - In order to minimize rotation orchestration across multiple services the client needs to be in control of the connection and timing of requests.
 
 **Key Takeaways:**

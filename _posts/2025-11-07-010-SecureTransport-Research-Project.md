@@ -9,6 +9,8 @@ excerpt: "A comprehensive research prototype exploring automated certificate rot
 
 A research prototype messaging system exploring practical solutions to operational challenges in modern cryptographic infrastructure including evolution to post-quantum cryptography and automated short life rotation for certificates - both Intermediate and Leaf with zero service downtime.
 
+- **Note** The initial draft of each of these blogs were generated using Claude Sonnet 4.5 within Copilot given a requested outline. It had access to all of the project code and scripts. This draft was then manually editted and specific sections were requested to be revised based upon manual review.
+
 ## Series Overview
 
 This multi-part series covers:

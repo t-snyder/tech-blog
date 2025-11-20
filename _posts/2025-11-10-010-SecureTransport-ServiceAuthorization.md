@@ -1031,7 +1031,7 @@ Class:   ServiceACLWatcherVert.java
   }
 ```
  
-### 3.3 Critical Authorization Logic
+### 3.5 Critical Authorization Logic
 
 **The Enforcement Happens at Bundle Generation Time:**
 
@@ -1061,7 +1061,7 @@ topicPermissions = {
 //   - Mathematically impossible, not just policy-blocked
 ```
 
-### 3.4 TopicPermission Structure
+### 3.6 TopicPermission Structure
 
 ```
 Project: svc-core
@@ -1113,7 +1113,7 @@ public class TopicPermission {
 ### 4.2 Key Exchange Flow
 
 ```
-┌─────────────┐                                    ┌──────────────┐
+┌───────────────┐                                  ┌──────────────┐
 │ AuthController│                                  │   Metadata   │
 │   (Client)    │                                  │   Service    │
 └───────┬───────┘                                  └──────┬───────┘
@@ -1486,7 +1486,7 @@ String secretKeyId = UUID.randomUUID().toString();
 
 ### 6.1 ServiceBundle Updates
 
-When keys rotate (every 15 minutes for topic keys, every epoch for signing keys):
+When keys rotate (every epoch for both topic keys and signing keys - epoch = 15 minutes):
 
 ```java
 // Triggered by periodic timer or ACL change
@@ -1511,10 +1511,10 @@ Future<Void> rotateKeys() {
 - Service requests update when it detects missing keys
 - Use case: Initial bootstrap, recovery from errors
 
-**Push Model (Proactive):**
+**Push Model (Proactive- Note This has not been tested, just stubbed):**
 - Metadata service publishes bundle updates on rotation
 - Services receive updates via `metadata.bundle-push.svc-{serviceId}` topics
-- Use case: Scheduled rotations, ACL changes
+- Use case: On ACL changes
 
 **Hybrid Approach:**
 ```java
@@ -1621,6 +1621,7 @@ metrics.counter("keycache.lookups.hit");
 - Emergency revocation: Force immediate key rotation
 - Blacklist compromised keys (checked on message receipt)
 - Reduce epoch duration for high-security scenarios
+- Future tested support for ACL change processing - new ServiceBundles published immediately
 
 ### 9.2 Bundle Size Growth
 
@@ -1636,6 +1637,7 @@ metrics.counter("keycache.lookups.hit");
 **Challenge:** Epoch boundaries require synchronized clocks.
 
 **Mitigation:**
+- Every message contains the Epoch and TopicKey id. TopicKeys can be retrieved by Id
 - NTP/PTP time sync
 - Overlapping validity windows (current + next + legacy epochs)
 - Automatic epoch calculation with tolerance
@@ -1659,7 +1661,6 @@ The ServiceBundle + Key Exchange architecture demonstrates that **cryptographic 
 - **Blog 4**: Automated Certificate Rotation (Intermediate + Leaf) and certificate management
 - **Blog 5**: OpenBao Integration and App Role token management
 - **Blog 6**: NATS messaging with short-lived keys and topic permissions
-- **Blog 7**: Alternative Architectures Tested
 
 ---
 

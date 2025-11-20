@@ -41,13 +41,13 @@ This blog explores the complete OpenBao integration lifecycle: AppRole configura
 ### 1.1 The Agent Sidecar Pattern
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                  OpenBao Integration Architecture                │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                  OpenBao Integration Architecture            │
+└──────────────────────────────────────────────────────────────┘
 
-┌───────────────────────────────────────────────────────────────┐
-│ Kubernetes Pod: metadata                                      │
-│                                                               │
+┌──────────────────────────────────────────────────────────────┐
+│ Kubernetes Pod: metadata                                     │
+│                                                              │
 │  ┌─────────────────────────┐  ┌──────────────────────────┐   │
 │  │ Container: bao-agent    │  │ Container: metadata      │   │
 │  │                         │  │                          │   │
@@ -57,41 +57,41 @@ This blog explores the complete OpenBao integration lifecycle: AppRole configura
 │  │ • Local API proxy       │  │                          │   │
 │  │   (localhost:8100)      │  │                          │   │
 │  └─────────────────────────┘  └──────────────────────────┘   │
-│          │                              │                     │
-│          │ Shares PVC:                  │                     │
-│          │ /home/bao/token              │                     │
-│          └──────────────────────────────┘                     │
-│                                                               │
-│  Volumes:                                                     │
-│  • bao-agent-token (PVC)      - Shared token file            │
-│  • bao-approle (Secret)        - role-id + secret-id         │
-│  • openbao-ca (Secret)         - CA certificate              │
+│          │                              │                    │
+│          │ Shares PVC:                  │                    │
+│          │ /home/bao/token              │                    │
+│          └──────────────────────────────┘                    │
+│                                                              │
+│  Volumes:                                                    │
+│  • bao-agent-token (PVC)        - Shared token file          │
+│  • bao-approle (Secret)         - role-id + secret-id        │
+│  • openbao-ca (Secret)          - CA certificate             │
 │  • bao-agent-config (ConfigMap) - Agent configuration        │
-└───────────────────────────────────────────────────────────────┘
+└──────────────────────────────────────────────────────────────┘
                               │
                               │ TLS (mTLS via Istio Gateway)
                               ▼
-┌───────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────┐
 │ OpenBao Server (openbao.openbao.svc.cluster.local:8200)      │
-│                                                               │
-│ • AppRole authentication                                      │
+│                                                              │
+│ • AppRole authentication                                     │
 │ • KV secrets engine (service-bundles, ca-bundles)            │
 │ • PKI engines (Root CA, Intermediate CA)                     │
 │ • Policy-based access control                                │
 │ • Audit logging                                              │
-└───────────────────────────────────────────────────────────────┘
+└──────────────────────────────────────────────────────────────┘
                               │
                               │ cert-manager integration
                               ▼
-┌───────────────────────────────────────────────────────────────┐
-│ cert-manager (TLS Certificate Management)                     │
-│                                                               │
-│ • Reads AppRole credentials from Secret                       │
-│ • Authenticates to OpenBao                                    │
+┌──────────────────────────────────────────────────────────────┐
+│ cert-manager (TLS Certificate Management)                    │
+│                                                              │
+│ • Reads AppRole credentials from Secret                      │
+│ • Authenticates to OpenBao                                   │
 │ • Requests certificate signing                               │
 │ • Stores certificate in Kubernetes Secret                    │
 │ • Auto-renewal before expiration                             │
-└───────────────────────────────────────────────────────────────┘
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ### 1.2 Key Components
@@ -1123,7 +1123,7 @@ T=06:00:00 - Old certificate expires
 
 ---
 
-## 6. Application-Level Vault Access
+## 6. Application-Level OpenBao Access
 
 ### 6.1 MetadataServiceVert Initialization
 
@@ -2742,7 +2742,6 @@ The operational complexity is justified for production systems requiring **zero-
 **What's Next:**
 
 - **Blog 6**: NATS messaging with short-lived keys and topic permissions
-- **Blog 7**: Alternative Architectures Tested
 
 ---
 
@@ -2751,7 +2750,7 @@ The operational complexity is justified for production systems requiring **zero-
 - [VaultAccessHandler.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-core/src/main/java/core/handler/VaultAccessHandler.java)
 - [MetadataServiceVert.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-metadata/src/main/java/verticle/MetadataServiceVert.java)
 - [MetadataKeyExchangeVert.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-metadata/src/main/java/verticle/MetadataKeyExchangeVert.java)
-- [Step-05-OpenBao-ConfigureAuthAndIssuers.sh](https://github.com/t-snyder/010-SecureTransport/blob/main/deploy/openbao/Step-05-OpenBao-ConfigureAuthAndIssuers.sh)
+- [Step-05-OpenBao-ConfigureAuthAndIssuers.sh](https://github.com/t-snyder/010-SecureTransport/blob/main/deploy/scripts/Step-05-OpenBao-ConfigureAuthAndIssuers.sh)
 
 ---
 

@@ -160,6 +160,7 @@ the same commands. The only differences are
 - The namespace created at the end - openbao, nats, <none> 
 
 **Key actions - Step-01a Used as an example:**
+0. **Delete Existing Minikube** Start with a fresh version
 1. **Starts Minikube** with profile "bao"
 2. **Enables dashboard** for visual monitoring
 3. **Enables MetalLB** (load balancer) and configures IP range
@@ -346,6 +347,8 @@ bao_in_pod write -ca-cert="$CA_CERT_PATH" pki/roles/2025-servers \
 Set the root default issuer
 bao_in_pod write -ca-cert="$CA_CERT_PATH" pki/config/issuers default="$ROOT_ISSUER_ID"
 ```
+---
+
 5. **Enable Nats Intermediate CA** Create the certs, role and default issuers for the Intermediate CA
 ```
 bao_in_pod secrets enable -ca-cert="$CA_CERT_PATH" -path=nats_int pki || echo "nats_int already enabled"
@@ -387,6 +390,8 @@ bao_in_pod write -ca-cert="$CA_CERT_PATH" nats_int/config/urls \
     issuing_certificates="$OPENBAO_ADDR/v1/nats_int/ca" \
     crl_distribution_points="$OPENBAO_ADDR/v1/nats_int/crl"
 ```
+---
+
 6. Create initial Nats CA Bundle for Client validation
 ```
 cat nats_ca.crt root_ca.crt > nats_ca_bundle.pem
@@ -396,6 +401,8 @@ cat nats_ca.crt root_ca.crt > nats_ca_bundle.pem
 Services need **both** certificates to verify the chain:
 Service cert → signed by → Intermediate CA → signed by → Root CA
 ```
+---
+
 7. Create Kubernetes Secret for CA Bundle
 ```bash
 kubectl create secret generic nats-ca-bundle \
@@ -407,6 +414,8 @@ kubectl create secret generic nats-ca-bundle \
 - Copied to other clusters
 - Used by services to verify NATS certificates
 ```
+---
+
 8. Create Certificate Role
 ```
 kubectl exec -n openbao openbao-0 -- bao write \
@@ -421,6 +430,7 @@ kubectl exec -n openbao openbao-0 -- bao write \
 - Certificates valid for max 12 hours
 ```
 
+---
 ## 3.4 Step 05: Configure OpenBao Roles and Policies
 - **The Script**: Step-05-OpenBao-ConfigureAuthAndIssuers.sh
 - **What it does:**
@@ -466,7 +476,7 @@ kubectl exec -n openbao openbao-0 -i -- bao write -ca-cert=$CA_CERT_PATH auth/ap
     bind_secret_id=true \
     secret_id_ttl=12h \
     secret_id_num_uses=0
-
+```
 ```
 
 # 4.0 Step 06: Deploy NATS to Servers Cluster
@@ -515,9 +525,11 @@ add_pull_consumer "GATEKEEPER_STREAM" "gatekeeper-responder-consumer" "gatekeepe
 - **The Script**: Step-07-DeployMetadataSvcToBaoCluster.sh
 - **What it does:**
 Deploys the metadata service.
-```
-Metadata Service (The Authority)
 
+---
+
+**Metadata Service (The Authority)**
+```
 Maintains authorization matrix defining service-to-service communication
 Generates and signs ServiceBundles for all services defining and implementing service permissions.
 Creates topic encryption keys with embedded permissions-
@@ -564,13 +576,13 @@ Just be sure to be in the right cluster profile.
 | 01a | bao | Create cluster | Empty k8s cluster with cert-manager |
 | 01b | servers | Create cluster | Empty k8s cluster with cert-manager |
 | 01c | services | Create cluster | Empty k8s cluster with cert-manager |
-| 02 | bao | Install OpenBao | 3 sealed Vault pods |
-| 03 | bao | Unseal OpenBao | 3 active Vault nodes in Raft cluster |
+| 02 | bao | Install OpenBao | 3 sealed OpenBao pods |
+| 03 | bao | Unseal OpenBao | 3 active OpenBao nodes in Raft cluster |
 | 04 | bao | Configure PKI | Root CA + NATS intermediate CA ready |
 | 05 | bao | Create AppRoles & Policies | NATS, Metadata, Watcher, Auth, Gatekeeper credentials |
 | 06 | servers | Deploy NATS | 3-node JetStream cluster with auto-renewing certs |
-| 07 | bao | Deploy Metadata | Service connecting to NATS in servers cluster |
-| 08 | servers | Deploy Watcher | Service monitoring cert health |
+| 07 | bao | Deploy Metadata | Service generating CA rotation, connecting to NATS in servers cluster |
+| 08 | servers | Deploy Watcher | Service orchestrating Nats CA rotation |
 | 09 | services | Deploy Auth | Authentication service |
 | 10 | services | Deploy Gatekeeper | API gateway service |
 
@@ -620,5 +632,4 @@ done
 - **Blog 4**: Automated Certificate Rotation (Intermediate + Leaf) and certificate management
 - **Blog 5**: OpenBao Integration and App Role token management
 - **Blog 6**: NATS messaging with short-lived keys and topic permissions
-- **Blog 7**: Alternative Architectures Tested
 

@@ -2841,12 +2841,6 @@ The overhead is real (4.5KB signature, 5ms latency), but the security and operat
 
 ---
 
-**What's Next:**
-
-- **Blog 7**: Alternative Architectures Tested
-
----
-
 **Explore the code:**
 - [SignedMessageProcessor.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-core/src/main/java/core/processor/SignedMessageProcessor.java)
 - [SignedMessage.java](https://github.com/t-snyder/010-SecureTransport/blob/main/svc-core/src/main/java/core/transport/SignedMessage.java)
